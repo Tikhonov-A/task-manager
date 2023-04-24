@@ -1,2 +1,5 @@
 rootProject.name = 'todo-list'
 
+includeBuild 'eureka-server'
+includeBuild 'auth-service'
+
