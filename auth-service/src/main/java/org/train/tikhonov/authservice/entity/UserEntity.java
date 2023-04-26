@@ -21,7 +21,15 @@ import java.util.stream.Collectors;
 public class UserEntity implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private Long id;
 
     @Column(name = "first_name")
@@ -32,9 +40,6 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "email", unique = true)
     private String email;
-
-    @Column(name = "username", unique = true)
-    private String username;
 
     @Column(name = "password")
     private String password;
@@ -59,7 +64,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
@@ -74,7 +79,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !status.getName().equals("active");
     }
 
     @Override
@@ -84,6 +89,6 @@ public class UserEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status.getName().equals("active");
+        return status.getName().equals("enabled");
     }
 }

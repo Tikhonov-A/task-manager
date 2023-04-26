@@ -1,29 +1,33 @@
 package org.train.tikhonov.authservice.rest;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.train.tikhonov.authservice.dto.AuthenticationDto;
-import org.train.tikhonov.authservice.service.UserService;
+import org.train.tikhonov.authservice.service.AuthService;
 
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
-@RequiredArgsConstructor
+@Api(description = "dsfsfs")
 public class AuthenticationRestController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> authenticate(@RequestBody AuthenticationDto requestBody) {
-        String token = userService.authenticate(requestBody.username());
+        String token = authService.authenticate(requestBody.username());
         return ResponseEntity.ok(token);
     }
 
     @GetMapping("/refresh")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
         return null;
     }
 

@@ -17,10 +17,22 @@ import java.util.Set;
 public class StatusEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+            name = "status_sequence",
+            sequenceName = "status_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "status_sequence"
+    )
     private Long id;
 
     private String name;
+
+    public StatusEntity(String name) {
+        this.name = name;
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
     private Set<UserEntity> users;
