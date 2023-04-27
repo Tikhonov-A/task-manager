@@ -46,7 +46,7 @@ public class RegistrationService {
         });
 
         StatusEntity status = statusRepository.findByName("unverified");
-        Set<RoleEntity> roles = roleRepository.findAllByName("user");
+        RoleEntity role = roleRepository.findByName("user");
         UserEntity user = userRepository.saveAndFlush(
                 UserEntity.builder().
                         firstName(request.firstName()).
@@ -54,7 +54,7 @@ public class RegistrationService {
                         email(request.email()).
                         password(passwordEncoder.encode(request.password())).
                         status(status).
-                        roles(roles).
+                        roles(Set.of(role)).
                 build()
         );
         String token = UUID.randomUUID().toString();

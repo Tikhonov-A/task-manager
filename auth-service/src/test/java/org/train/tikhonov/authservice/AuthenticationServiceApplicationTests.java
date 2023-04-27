@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AuthenticationServiceApplicationTests {
 
     @Test
-    void contextLoads() {
+    void test() {
+        System.out.println("hello");
     }
 
 }

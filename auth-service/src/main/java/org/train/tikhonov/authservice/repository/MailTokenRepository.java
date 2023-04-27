@@ -7,5 +7,4 @@ import org.train.tikhonov.authservice.entity.MailTokenEntity;
 
 @Repository
 public interface MailTokenRepository extends CrudRepository<MailTokenEntity, String> {
-
 }
