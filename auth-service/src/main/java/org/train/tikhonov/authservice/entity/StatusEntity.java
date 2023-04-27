@@ -30,9 +30,6 @@ public class StatusEntity {
 
     private String name;
 
-    public StatusEntity(String name) {
-        this.name = name;
-    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
     private Set<UserEntity> users;

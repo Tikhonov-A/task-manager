@@ -1,6 +1,5 @@
 package org.train.tikhonov.authservice.service;
 
-import io.swagger.annotations.Api;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,14 +9,12 @@ import org.train.tikhonov.authservice.entity.MailTokenEntity;
 import org.train.tikhonov.authservice.entity.RoleEntity;
 import org.train.tikhonov.authservice.entity.StatusEntity;
 import org.train.tikhonov.authservice.entity.UserEntity;
-import org.train.tikhonov.authservice.exception.EmailException;
-import org.train.tikhonov.authservice.exception.InvalidEmailException;
+import org.train.tikhonov.authservice.exception.TokenException;
 import org.train.tikhonov.authservice.exception.UsernameAlreadyExistsException;
 import org.train.tikhonov.authservice.repository.MailTokenRepository;
 import org.train.tikhonov.authservice.repository.RoleRepository;
 import org.train.tikhonov.authservice.repository.StatusRepository;
 import org.train.tikhonov.authservice.repository.UserRepository;
-import org.train.tikhonov.authservice.utils.EmailValidator;
 
 import java.util.Set;
 import java.util.UUID;
@@ -29,27 +26,23 @@ public class RegistrationService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final StatusRepository statusRepository;
-    private final MailTokenRepository mailTokenRepository;
 
-    private final EmailValidator emailValidator;
+    private final MailTokenRepository mailTokenRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+
+    private final String CONFIRM_TOKEN_MESSAGE = "Please confirm your email";
+    private final String ACCOUNT_ALREADY_EXISTS_MESSAGE = "User with email %s already exist";
 
 
     @Transactional
     public String register(RegistrationDto request) {
         String email = request.email();
 
-        if (!emailValidator.test(request.email())) {
-            throw new InvalidEmailException("Email is not valid");
-        }
         userRepository.findByEmail(email).ifPresent(userEntity -> {
             if (userEntity.getStatus().getName().equals("unverified")) {
-                throw new EmailException("Please confirm an email");
+                throw new TokenException(CONFIRM_TOKEN_MESSAGE);
             }
-            throw new UsernameAlreadyExistsException(String.format(
-                    "User with email %s already exist? if you cannot enter account, please confirm the email",
-                    email)
-            );
+            throw new UsernameAlreadyExistsException(String.format(ACCOUNT_ALREADY_EXISTS_MESSAGE, email));
         });
 
         StatusEntity status = statusRepository.findByName("unverified");
@@ -67,15 +60,13 @@ public class RegistrationService {
         String token = UUID.randomUUID().toString();
         MailTokenEntity mailToken = new MailTokenEntity(token, user.getId().toString());
         mailTokenRepository.save(mailToken);
-        //System.out.println(mailTokenRepository.findAll());
-        // Отпарвка email
         return token;
     }
 
     @Transactional
     public void confirm(String token) {
         MailTokenEntity mailToken = mailTokenRepository.findById(token).orElseThrow(
-                () -> new EmailException("Email token is expired")
+                () -> new TokenException("Token is expired or incorrect link")
         );
         Long personId = Long.valueOf(mailToken.getPersonId());
         userRepository.findById(personId).get().setStatus(statusRepository.findByName("enabled"));

@@ -9,8 +9,3 @@ repositories {
     mavenCentral()
 }
 
-dependencyManagement {
-    imports {
-        'org.springframework.boot:spring-boot-dependencies:3.0.6'
-    }
-}
