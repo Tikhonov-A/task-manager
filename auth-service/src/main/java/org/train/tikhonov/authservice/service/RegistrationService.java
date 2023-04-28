@@ -23,6 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RegistrationService {
 
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final StatusRepository statusRepository;

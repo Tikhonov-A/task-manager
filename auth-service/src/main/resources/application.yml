@@ -12,8 +12,10 @@ spring:
     username: postgres
     password: 21471972
     driverClassName: org.postgresql.Driver
+
   jpa:
     hibernate.ddl-auto: create
+    show-sql: true
 
 
 eureka.client.serviceUrl:

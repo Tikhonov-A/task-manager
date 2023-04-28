@@ -22,9 +22,7 @@ import java.util.stream.Collectors;
 public class AuthenticationService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
     private final JwtService jwtService;
-
     private final BCryptPasswordEncoder passwordEncoder;
 
 

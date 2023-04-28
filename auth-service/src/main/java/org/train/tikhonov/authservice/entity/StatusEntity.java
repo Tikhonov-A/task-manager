@@ -33,4 +33,8 @@ public class StatusEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
     private Set<UserEntity> users;
+
+    public StatusEntity(String name) {
+        this.name = name;
+    }
 }

@@ -56,6 +56,13 @@ public class UserEntity implements UserDetails {
     )
     private Set<RoleEntity> roles;
 
+    public UserEntity(String firstName, String lastName, String email, String password, StatusEntity status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -90,5 +97,14 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return status.getName().equals("enabled");
+    }
+
+    public UserEntity(String firstName, String lastName, String email, String password, StatusEntity status, Set<RoleEntity> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.roles = roles;
     }
 }
