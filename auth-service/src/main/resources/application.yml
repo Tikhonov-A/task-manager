@@ -9,13 +9,12 @@ spring:
     name: auth-service
   datasource:
     url: jdbc:postgresql://localhost:5432/users
-    username: postgres
-    password: 21471972
+    username: aleks
+    password: postgres
     driverClassName: org.postgresql.Driver
 
   jpa:
     hibernate.ddl-auto: create
-    show-sql: true
 
 
 eureka.client.serviceUrl:
