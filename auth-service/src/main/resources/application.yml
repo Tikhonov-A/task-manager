@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 0
   error:
     include-message: always
     include-binding-errors: always
@@ -9,7 +9,7 @@ spring:
     name: auth-service
   datasource:
     url: jdbc:postgresql://localhost:5432/users
-    username: aleks
+    username: postgres
     password: postgres
     driverClassName: org.postgresql.Driver
 
