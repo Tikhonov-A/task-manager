@@ -1,5 +1,5 @@
 server:
-  port: 0
+  port: 9999
   error:
     include-message: always
     include-binding-errors: always
@@ -7,11 +7,6 @@ server:
 spring:
   application:
     name: task-manager
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/users
-#    username: postgres
-#    password: postgres
-#    driverClassName: org.postgresql.Driver
   data:
     mongodb:
       authentication-database: admin
@@ -20,8 +15,9 @@ spring:
       database: tasks
       port: 27017
       host: localhost
+      auto-index-creation: true
   jpa:
-    hibernate.ddl-auto: create
+    hibernate.ddl-auto: create-drop
 
 
 eureka.client.serviceUrl:

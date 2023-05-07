@@ -1,8 +1,7 @@
 package org.train.tikhonov.taskmanager.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,7 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
+@ToString
+@Document(collection = "tasks")
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Task {
 
     @Id

@@ -46,8 +46,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-    volumes:
-      - mongo:/data
+#    volumes:
+#      - mongo:/data
     networks:
       - mongo
     restart: unless-stopped
@@ -64,6 +64,12 @@ services:
     networks:
       - mongo
     restart: unless-stopped
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+    restart: unless-stopped
 
 networks:
   postgres:
@@ -75,4 +81,4 @@ volumes:
   postgres:
   pgadmin:
   redis:
-  mongo:
+#  mongo:
