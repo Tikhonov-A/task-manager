@@ -20,8 +20,13 @@ public class AuthenticationRestController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> authenticate(@RequestBody AuthenticationDto requestBody) {
-        Map<String, String> tokens = authenticationService.authenticate(requestBody);
-        return ResponseEntity.ok().body(tokens);
+        return ResponseEntity.ok().body(Map.of("token", authenticationService.authenticate(requestBody)));
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<String> authenticate(@RequestParam String token) {
+        authenticationService.validateToken(token);
+        return ResponseEntity.ok().body("Token is valid");
     }
 
 }

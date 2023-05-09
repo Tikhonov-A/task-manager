@@ -13,6 +13,7 @@ import org.train.tikhonov.taskmanager.repository.UserTaskRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -43,7 +44,7 @@ public class TaskManagerApplication {
                     build();
             task1 = taskRepository.save(task1);
             task2 = taskRepository.save(task2);
-            userTaskRepository.save(new UserTasks(1L, List.of(task1, task2)));
+            userTaskRepository.save(new UserTasks(UUID.randomUUID(), List.of(task1, task2)));
         };
     }
 

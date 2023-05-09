@@ -38,14 +38,13 @@ public class AuthServiceApplication {
             statusRepository.save(StatusEntity.builder().name("locked").build());
             statusRepository.save(StatusEntity.builder().name("unverified").build());
             StatusEntity enabled = statusRepository.save(StatusEntity.builder().name("enabled").build());
-            statusRepository.save(StatusEntity.builder().name("deleted").build());
             userRepository.save(
                     UserEntity.
                             builder().
                             firstName("aleks").
                             lastName("tikhonov").
                             email("aleksandr.tihonov.02@mail.ru").
-                            password(passwordEncoder.encode("21471972")).
+                            password(passwordEncoder.encode("12345")).
                             status(enabled).
                             roles(Set.of(admin, user)).
                             build()

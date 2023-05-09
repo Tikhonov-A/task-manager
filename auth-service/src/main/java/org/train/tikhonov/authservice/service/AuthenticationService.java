@@ -3,7 +3,11 @@ package org.train.tikhonov.authservice.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,32 +23,34 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class AuthenticationService implements UserDetailsService {
+public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
 
     @Transactional
-    public Map<String, String> authenticate(AuthenticationDto request) {
-        UserEntity user = (UserEntity) loadUserByUsername(request.email());
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            throw new BadCredentialsException("Password is incorrect");
+    public String authenticate(AuthenticationDto request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException(e.getMessage());
         }
-        String accessToken = jwtService.createAccessToken(user.getUsername(),
-                user.getRoles().stream().map(RoleEntity::getName).collect(Collectors.toSet())
+        UserEntity user = findByEmail(request.email());
+        return jwtService.createToken(user.getEmail(),
+                user.getRoles().stream().map(RoleEntity::getName).collect(Collectors.toSet()),
+                user.getId()
         );
-
-        String refreshToken = jwtService.createRefreshToken(user.getUsername(),
-                user.getRoles().stream().map(RoleEntity::getName).collect(Collectors.toSet())
-        );
-
-        return Map.of("access_token", accessToken, "refresh_token", refreshToken);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public void validateToken(String token) {
+        jwtService.isTokenExpired(token);
+    }
+
+    public UserEntity findByEmail(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("User with email %s doesn't exist", email))
         );

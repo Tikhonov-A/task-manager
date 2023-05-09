@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -25,12 +26,12 @@ public class UserTasks {
 
     @Indexed(unique = true)
     @Field("user_id")
-    private Long userId;
+    private UUID userId;
 
     @DBRef
     private List<Task> tasks;
 
-    public UserTasks(Long userId, List<Task> tasks) {
+    public UserTasks(UUID userId, List<Task> tasks) {
         this.userId = userId;
         this.tasks = tasks;
     }

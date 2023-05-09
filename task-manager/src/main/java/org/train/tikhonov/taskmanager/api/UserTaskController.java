@@ -41,5 +41,4 @@ public class UserTaskController {
         return ResponseEntity.ok().body(Map.of("message", "task with id " + taskId + " was deleted"));
     }
 
-
 }
