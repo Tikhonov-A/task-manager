@@ -24,4 +24,13 @@ public class Task {
     private LocalDateTime createdAt;
     private LocalDateTime endAt;
     private LocalDateTime notification;
+
+    public Task(String name, String description, TaskStatus status, LocalDateTime createdAt, LocalDateTime endAt, LocalDateTime notification) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.endAt = endAt;
+        this.notification = notification;
+    }
 }

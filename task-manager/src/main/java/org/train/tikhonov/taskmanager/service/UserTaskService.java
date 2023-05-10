@@ -18,7 +18,10 @@ import org.train.tikhonov.taskmanager.mapper.TaskDtoMapper;
 import org.train.tikhonov.taskmanager.repository.TaskRepository;
 import org.train.tikhonov.taskmanager.repository.UserTaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -33,14 +36,16 @@ public class UserTaskService {
     private final TaskDtoMapper taskDtoMapper;
     private final MongoTemplate mongoTemplate;
 
-    public List<TaskDto> getAllUserTasks(Long userId) {
-        UserTasks userTasks = userTaskRepository.findByUserId(userId).orElseThrow(() ->
-                new UserNotFoundException("User not found")
-        );
+    public List<TaskDto> getAllUserTasks(UUID userId) {
+        Optional<UserTasks> userTasksOptional = userTaskRepository.findByUserId(userId);
+        if (userTasksOptional.isEmpty()) {
+            return new ArrayList<>();
+        }
+        UserTasks userTasks = userTasksOptional.get();
         return userTasks.getTasks().stream().map(taskDtoMapper).collect(Collectors.toList());
     }
 
-    public void deleteUserTaskById(Long userId, String taskId) {
+    public void deleteUserTaskById(UUID userId, String taskId) {
         taskRepository.findById(taskId).orElseThrow(() ->
                 new TaskNotFoundException("Task not found")
         );
@@ -49,7 +54,7 @@ public class UserTaskService {
                 new Update().pull("tasks", new DBRef("tasks", taskId)), UserTasks.class);
     }
 
-    public void updateUserTaskById(Long userId, String taskId, TaskDto taskRequest) {
+    public void updateUserTaskById(UUID userId, String taskId, TaskDto taskRequest) {
         Task task = taskRepository.findById(taskId).orElseThrow(() ->
                 new TaskNotFoundException("Task not found")
         );
@@ -60,5 +65,22 @@ public class UserTaskService {
         task.setEndAt(taskRequest.endAt());
         task.setNotification(taskRequest.notification());
         taskRepository.save(task);
+    }
+
+    public void addUserTask(UUID userId, TaskDto task) {
+
+        userTaskRepository.save(new UserTasks(
+
+        ))
+        Task savedTask = taskRepository.save(
+                new Task(
+                        task.name(),
+                        task.description(),
+                        task.status(),
+                        task.createdAt(),
+                        task.endAt(),
+                        task.notification()
+                )
+        );
     }
 }

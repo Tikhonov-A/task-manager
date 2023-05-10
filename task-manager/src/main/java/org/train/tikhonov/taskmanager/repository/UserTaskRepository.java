@@ -9,12 +9,13 @@ import org.train.tikhonov.taskmanager.entity.UserTasks;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserTaskRepository extends MongoRepository<UserTasks, String> {
 
 
-    Optional<UserTasks> findByUserId(Long userId);
+    Optional<UserTasks> findByUserId(UUID userId);
 
     @Query(value = "{$pull: {'userId': ?0, tasks.id : ?1}}")
-    void deleteTaskByTaskId(Long userId, String taskId);
+    void deleteTaskByTaskId(UUID userId, String taskId);
 }

@@ -10,6 +10,7 @@ import org.train.tikhonov.taskmanager.service.UserTaskService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @RestController
@@ -19,24 +20,30 @@ public class UserTaskController {
 
     private final UserTaskService userTaskService;
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<TaskDto>> getAllUserTasks(@PathVariable Long userId) {
+    @GetMapping("")
+    public ResponseEntity<List<TaskDto>> getAllUserTasks(@RequestParam UUID userId) {
         return ResponseEntity.ok().body(userTaskService.getAllUserTasks(userId));
     }
 
+    @PostMapping("")
+    public ResponseEntity<Map<String, String>> addUserTasks(@RequestParam UUID userId, @RequestBody TaskDto task) {
+        userTaskService.addUserTask(userId,task);
+        return ResponseEntity.ok().body(Map.of("message", "task was added"));
+    }
 
-    @PatchMapping("/{userId}")
+
+    @PatchMapping("/{taskId}")
     public ResponseEntity<Map<String, String>> updateUserTask(
-            @PathVariable Long userId,
-            @RequestParam String taskId,
+            @RequestParam UUID userId,
+            @PathVariable String taskId,
             @RequestBody TaskDto task
     ) {
         userTaskService.updateUserTaskById(userId, taskId, task);
         return ResponseEntity.ok().body(Map.of("message", "task with id " + taskId + " was updated"));
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Map<String, String>> deleteUserTask(@PathVariable Long userId, @RequestParam String taskId) {
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<Map<String, String>> deleteUserTask(@RequestParam UUID userId, @PathVariable String taskId) {
         userTaskService.deleteUserTaskById(userId, taskId);
         return ResponseEntity.ok().body(Map.of("message", "task with id " + taskId + " was deleted"));
     }
