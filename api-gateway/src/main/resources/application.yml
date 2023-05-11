@@ -29,7 +29,6 @@ spring:
           uri: lb://task-manager
           predicates:
             - Path=/api/v1/tasks/**
-            - Method=POST, GET
           filters:
             - AuthenticationFilter
 

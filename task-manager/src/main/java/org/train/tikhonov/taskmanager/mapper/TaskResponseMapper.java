@@ -1,17 +1,19 @@
 package org.train.tikhonov.taskmanager.mapper;
 
 import org.springframework.stereotype.Component;
-import org.train.tikhonov.taskmanager.dto.TaskDto;
+import org.train.tikhonov.taskmanager.dto.TaskRequest;
+import org.train.tikhonov.taskmanager.dto.TaskResponse;
 import org.train.tikhonov.taskmanager.entity.Task;
 
 import java.util.function.Function;
 
 @Component
-public class TaskDtoMapper implements Function<Task, TaskDto> {
+public class TaskResponseMapper implements Function<Task, TaskResponse> {
 
     @Override
-    public TaskDto apply(Task task) {
-        return new TaskDto(
+    public TaskResponse apply(Task task) {
+        return new TaskResponse(
+                task.getId(),
                 task.getName(),
                 task.getDescription(),
                 task.getStatus(),

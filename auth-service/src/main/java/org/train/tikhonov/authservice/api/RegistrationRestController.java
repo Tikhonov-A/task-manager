@@ -1,7 +1,9 @@
 package org.train.tikhonov.authservice.api;
 
 
+import jakarta.ws.rs.HttpMethod;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.train.tikhonov.authservice.dto.RegistrationDto;
@@ -18,17 +20,19 @@ public class RegistrationRestController {
     private final RegistrationService registrationService;
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegistrationDto request) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Map<String, String> register(@RequestBody RegistrationDto request) {
         String token = registrationService.register(request);
         Map<String, String> response = new HashMap<>();
         response.put("message", "confirm your registration");
         response.put("token", token);
-        return ResponseEntity.ok().body(response);
+        return response;
     }
 
     @PostMapping("/confirm")
-    public ResponseEntity<Map<String, String>> confirmEmail(@RequestParam String token) {
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> confirmEmail(@RequestParam String token) {
         registrationService.confirm(token);
-        return ResponseEntity.ok().body(Map.of("message", "Success registration"));
+        return Map.of("message", "Email confirmed");
     }
 }

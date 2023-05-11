@@ -59,7 +59,7 @@ public class RegistrationService {
                 build()
         );
         String token = UUID.randomUUID().toString();
-        MailTokenEntity mailToken = new MailTokenEntity(token, user.getId().toString());
+        MailTokenEntity mailToken = new MailTokenEntity(token, user.getId());
         mailTokenRepository.save(mailToken);
         return token;
     }
@@ -69,7 +69,7 @@ public class RegistrationService {
         MailTokenEntity mailToken = mailTokenRepository.findById(token).orElseThrow(
                 () -> new TokenException("Token is expired or incorrect link")
         );
-        Long personId = Long.valueOf(mailToken.getPersonId());
+        UUID personId = mailToken.getPersonId();
         userRepository.findById(personId).get().setStatus(statusRepository.findByName("enabled"));
     }
 

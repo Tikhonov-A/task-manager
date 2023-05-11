@@ -29,22 +29,22 @@ public class TaskManagerApplication {
             TaskRepository taskRepository
     ) {
         return args -> {
-            Task task1 = Task.builder().
-                    name("task1").
-                    description("Some task").
-                    status(TaskStatus.PLANNED).
-                    createdAt(LocalDateTime.now()).
-                    endAt(LocalDateTime.now()).
-                    notification(LocalDateTime.now()).
-                    build();
-            Task task2 = Task.builder().
-                    name("task2").
-                    status(TaskStatus.DOING).
-                    createdAt(LocalDateTime.now()).
-                    build();
-            task1 = taskRepository.save(task1);
-            task2 = taskRepository.save(task2);
-            userTaskRepository.save(new UserTasks(UUID.randomUUID(), List.of(task1, task2)));
+//            Task task1 = Task.builder().
+//                    name("task1").
+//                    description("Some task").
+//                    status(TaskStatus.PLANNED).
+//                    createdAt(LocalDateTime.now()).
+//                    endAt(LocalDateTime.now()).
+//                    notification(LocalDateTime.now()).
+//                    build();
+//            Task task2 = Task.builder().
+//                    name("task2").
+//                    status(TaskStatus.DOING).
+//                    createdAt(LocalDateTime.now()).
+//                    build();
+//            task1 = taskRepository.save(task1);
+//            task2 = taskRepository.save(task2);
+//            userTaskRepository.save(new UserTasks(UUID.randomUUID(), List.of(task1, task2)));
         };
     }
 

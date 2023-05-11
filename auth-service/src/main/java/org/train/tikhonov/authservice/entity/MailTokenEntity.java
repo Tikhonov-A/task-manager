@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,5 +18,5 @@ public class MailTokenEntity implements Serializable {
 
     @Id
     private String id;
-    private String personId;
+    private UUID personId;
 }

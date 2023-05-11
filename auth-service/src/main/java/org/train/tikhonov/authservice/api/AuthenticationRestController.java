@@ -3,6 +3,7 @@ package org.train.tikhonov.authservice.api;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.train.tikhonov.authservice.dto.AuthenticationDto;
@@ -19,14 +20,8 @@ public class AuthenticationRestController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> authenticate(@RequestBody AuthenticationDto requestBody) {
-        return ResponseEntity.ok().body(Map.of("token", authenticationService.authenticate(requestBody)));
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, String> authenticate(@RequestBody AuthenticationDto requestBody) {
+        return Map.of("token", authenticationService.authenticate(requestBody));
     }
-
-    @GetMapping("/validate")
-    public ResponseEntity<String> authenticate(@RequestParam String token) {
-        authenticationService.validateToken(token);
-        return ResponseEntity.ok().body("Token is valid");
-    }
-
 }
