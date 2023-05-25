@@ -2,4 +2,6 @@ rootProject.name = 'todo-list'
 
 includeBuild 'eureka-server'
 includeBuild 'auth-service'
+includeBuild 'api-gateway'
+includeBuild 'task-manager'
 
